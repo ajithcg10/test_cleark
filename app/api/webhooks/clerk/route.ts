@@ -1,4 +1,5 @@
 import { AuthCreate } from "@/app/lib/auth.actions";
+import { createUser } from "@/app/lib/data.actions";
 import { clerkClient } from "@clerk/nextjs";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
@@ -55,20 +56,23 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   // CREATE User in mongodb
+  // CREATE User in mongodb
   if (eventType === "user.created") {
-    const { id, email_addresses, image_url, username } =
+    const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
 
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
-      userName: username!,
-      profileImage: image_url,
+      username: username!,
+      firstName: first_name,
+      lastName: last_name,
+      photo: image_url,
     };
 
     console.log(user);
 
-    const newUser = await AuthCreate(user);
+    const newUser = await createUser(user);
     console.log(newUser);
     
 

@@ -12,9 +12,7 @@ export const connectToDB = async () => {
 
   try {
     await mongoose.connect(process.env.MONGODB_URI!, {
-      dbName: "clerk-next14-db",
-      bufferCommands: false,
-      connectTimeoutMS: 30000,
+      dbName: "Halo",
     });
 
     isConnected = true;

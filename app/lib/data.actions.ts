@@ -4,7 +4,7 @@ import { connectToDB } from "../database";
 import Data from "../database/models/Data";
 
 
-export async function createUser(user: any) {
+export async function createUser(user:any) {
   try {
     await connectToDB();
     const newUser = await Data.create(user);

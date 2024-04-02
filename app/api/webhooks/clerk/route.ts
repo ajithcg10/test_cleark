@@ -56,23 +56,20 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   // CREATE User in mongodb
-  // CREATE User in mongodb
   if (eventType === "user.created") {
-    const { id, email_addresses, image_url, first_name, last_name, username } =
+    const { id, email_addresses, image_url, username } =
       evt.data;
 
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
-      userName: username!,
+      username: username!,
       profileImage: image_url,
     };
 
     console.log(user);
 
     const newUser = await AuthCreate(user);
-    console.log(newUser);
-    
 
     if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {

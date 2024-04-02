@@ -2,7 +2,7 @@
 import { Document, Schema, model, models } from "mongoose";
 
 const UserSechema = new Schema({
-    userName:{
+    username:{
         type: String,
         required: true
     },
@@ -10,10 +10,6 @@ const UserSechema = new Schema({
         type: String,
         required: true,
         unique: true,
-    },
-    password:{
-        type: String,
-        required: true,
     },
     profileImage:{
         type: String,

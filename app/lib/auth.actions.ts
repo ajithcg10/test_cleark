@@ -35,34 +35,34 @@ export const AuthCreate = async (user:any)=>{
 }  
 
 
-export const AuthLogin = async ({user,isVerifyed}:LoginProps)=>{
-    try{
-      await connectToDB()
-      const foundUser = await User.findOne({email: user.email})
-      const hasPAsword = await bcrypt.hash(user.password ,10)
+// export const AuthLogin = async ({user,isVerifyed}:LoginProps)=>{
+//     try{
+//       await connectToDB()
+//       const foundUser = await User.findOne({email: user.email})
+//       const hasPAsword = await bcrypt.hash(user.password ,10)
     
       
-      const CreateLogin = await Login.create({...user,loginDetails:foundUser._id,isVerifyed:isVerifyed})
+//       const CreateLogin = await Login.create({...user,loginDetails:foundUser._id,isVerifyed:isVerifyed})
       
-      if(!foundUser){
-        throw new Error(`email is not available`)
-      }
+//       if(!foundUser){
+//         throw new Error(`email is not available`)
+//       }
  
-      const isPasswordMatch = await bcrypt.compare(user?.password,foundUser?.password,)
+//       const isPasswordMatch = await bcrypt.compare(user?.password,foundUser?.password,)
     
       
-      if(!isPasswordMatch ){
-        return JSON.parse(JSON.stringify({message:"password is not available",status:404}))
-      }
-     return JSON.parse(JSON.stringify({CreateLogin,status:200}))
+//       if(!isPasswordMatch ){
+//         return JSON.parse(JSON.stringify({message:"password is not available",status:404}))
+//       }
+//      return JSON.parse(JSON.stringify({CreateLogin,status:200}))
       
 
     
-    }
-    catch(err){
-        console.log(err)
-    }
-}
+//     }
+//     catch(err){
+//         console.log(err)
+//     }
+// }
 
 export const getUserData_ById = async ({userId}:{userId:string}) =>{
   try {
@@ -100,7 +100,4 @@ export const UserUpdate = async ({userId,user,path}:UpdatUSerProps)=>{
  } catch (error) {
   
  }
-    
-
-
 }

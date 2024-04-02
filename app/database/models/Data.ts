@@ -1,29 +1,31 @@
 import { Schema, model, models } from "mongoose";
 
 const DataSchema = new Schema({
-    userName:{
-        type: String,
-        required: true
-    },
-    email:{
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password:{
-        type: String,
-        required: true,
-    },
-    profileImage:{
-        type: String,
-        default:''
-    },
-    
-    chats:{
-        type:[{type:Schema.Types.ObjectId,ref:"chat"}],
-        default:[]
-    },
-    clerkId:{type:String, default:""},
+  clerkId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  username: {
+    type: String,
+    unique: true,
+  },
+  photo: {
+    type: String,
+    required: true,
+  },
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+
 });
 
 const Data = models?.Data || model("Data", DataSchema);

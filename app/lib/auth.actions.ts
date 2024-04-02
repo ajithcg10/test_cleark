@@ -13,7 +13,7 @@ const populateEvent = (query: any) => {
     .populate({ path: 'loginDetails', model: User })
 }
 
-export const AuthCreate = async ({user}:AuthProps)=>{ 
+export const AuthCreate = async (user:any)=>{ 
     try{
       await connectToDB()
 

@@ -70,16 +70,15 @@ export async function POST(req: Request) {
     console.log(user);
 
     const newUser = await AuthCreate(user);
-
-    if (newUser) {
+    if(newUser) {
       await clerkClient.users.updateUserMetadata(id, {
         publicMetadata: {
-          userId: newUser._id,
-        },
-      });
+          userId: newUser._id
+        }
+      })
     }
 
-    return NextResponse.json({ message: "New user created", user: newUser });
+    return NextResponse.json({ message: 'OK', user: newUser })
   }
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);

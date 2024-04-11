@@ -64,12 +64,14 @@ export const AuthLogin = async ({user,isVerifyed}:LoginProps)=>{
     }
 }
 
-export const getUserData_ById = async ({userId}:{userId:string}) =>{
+export const getUserData_ById = async (userId:string) =>{
   try {
     await connectToDB()
    ;
     
-    const UserData =  await  Login.findOne({ email:userId }).populate('loginDetails').sort({ createdAt: -1 }).exec();
+   console.log(userId);
+   
+    const UserData =  await  User.findById( userId)
 
    
     

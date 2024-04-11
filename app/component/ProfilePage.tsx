@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import FilUpload from "./FilUpload";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { PersonOutline } from "@mui/icons-material";
 import Loader from "./Loader";
@@ -9,6 +8,7 @@ import { UserDataProps } from "../type";
 import { useRouter } from "next/navigation";
 import { CldUploadButton } from "next-cloudinary";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
 type Inputs = {
   userName: string;
 };
@@ -18,6 +18,7 @@ export default function ProfilePage() {
   const [file, setFile] = useState<string>("");
   const [datafile, setDataFile] = useState<UserDataProps>();
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -25,29 +26,33 @@ export default function ProfilePage() {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const { user } = useUser();
+  const userId = user?.publicMetadata.userId as string;
+  console.log(userId);
+
   useEffect(() => {
     const fetch_data = async () => {
-      const email = localStorage.getItem("email");
-      const userdata = await getUserData_ById({ userId: email! });
+      const userdata = await getUserData_ById(userId);
       setDataFile(userdata);
     };
     fetch_data();
   }, [IsSucess]);
+
   const onupload = (result: any) => {
     setFile(result?.info?.secure_url);
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (datafile) {
-      const userId = datafile?.data?.loginDetails._id;
+      const userId = datafile?.data?._id;
 
       if (datafile) {
         const useUpdate = await UserUpdate({
           userId: userId,
           user: {
-            ...datafile.data.loginDetails,
+            ...datafile.data,
             profileImage: file,
-            userName: data.userName,
+            username: data.userName,
           },
           path: "/profile",
         });
@@ -61,8 +66,8 @@ export default function ProfilePage() {
   };
   console.log(file, "ajith");
 
-  const userImage = datafile?.data?.loginDetails?.profileImage;
-  const userName = datafile?.data?.loginDetails?.userName.toUpperCase();
+  const userImage = datafile?.data?.profileImage;
+  const userName = datafile?.data?.username?.toUpperCase();
   return loading ? (
     <Loader />
   ) : (

@@ -8,8 +8,12 @@ import { get_All_Conatct } from "../lib/user.actions";
 import { LoginDetailsProps } from "../type";
 import Image from "next/image";
 import { create_chat } from "../lib/chat.actions";
+import { useUser } from "@clerk/nextjs";
 
-const Contact = () => {
+type props = {
+  userId?: string;
+};
+const Contact = (userId: props) => {
   const [loading, setLoading] = useState();
   const [contacts, setContacts] = useState([]);
   const [search, setSerach] = useState<string>("");
@@ -17,17 +21,18 @@ const Contact = () => {
   const [select, setSelect] = useState<LoginDetailsProps[]>([]);
   const [currentid, setCurrentId] = useState<LoginDetailsProps[]>([]);
   const router = useRouter();
+  const currentUserID = userId.userId;
+  console.log(select);
 
   useEffect(() => {
     const fetch_data = async () => {
       const data_list = await get_All_Conatct(search);
-      const email = localStorage.getItem("email");
       const currentUser = data_list?.filter(
-        (item: LoginDetailsProps) => item.email == email
+        (item: LoginDetailsProps) => item._id == currentUserID
       );
       setCurrentId(currentUser);
       const data_filter = data_list?.filter(
-        (item: LoginDetailsProps) => item.email !== email
+        (item: LoginDetailsProps) => item._id !== currentUserID
       );
       setContacts(data_filter);
     };
@@ -101,7 +106,7 @@ const Contact = () => {
                   height={100}
                   priority
                 />
-                <p className="text-base-bold">{item.userName}</p>
+                <p className="text-base-bold">{item.username}</p>
               </div>
             );
           })}
@@ -124,7 +129,7 @@ const Contact = () => {
                 <div className="flex flex-wrap gap-3">
                   {select.map((contact, index) => (
                     <p className="selected-contact" key={index}>
-                      {contact.userName}
+                      {contact.username}
                     </p>
                   ))}
                 </div>

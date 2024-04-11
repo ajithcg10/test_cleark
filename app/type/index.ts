@@ -16,13 +16,13 @@ export interface LoginProps {
     
 }
 export interface UpdatUSerProps {
-    userId:string,
+    userId:String,
     user:{
         _id: string,
         chats:any[],
-        userName:string,
+        username:string,
         email:string,
-        password:string,
+        // password:string,
         profileImage:string,
         __v: number,
       },
@@ -35,20 +35,22 @@ export type LoginDetailsProps ={
     email: string;
     password: string;
     profileImage: string;
-    userName: string;
+    username: string;
     __v: number;
     _id: string;
   }
   
 export  type UserDataProps ={
    data:{
-    createdAt: string;
+    _id: string; // Mongoose-generated ObjectID
+    clerkId: string;
     email: string;
-    isVerified: boolean;
-    loginDetails: LoginDetailsProps;
-    password: string;
-    __v: number;
-    _id: string;
+    username?: string; // Optional username
+    profileImage: string;
+    firstName?: string;
+    lastName?: string;
+    chats: string[]; // Array of chat IDs (assuming chat IDs are strings)
+    __v: number; //
    } 
   }
 

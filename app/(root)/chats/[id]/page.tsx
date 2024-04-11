@@ -3,6 +3,7 @@ import ChatDeatils from "@/app/component/ChatDeatils";
 import ChatList from "@/app/component/ChatList";
 import { getUserData_ById } from "@/app/lib/auth.actions";
 import { UpdateSeenMessage } from "@/app/lib/message.actions";
+import { useUser } from "@clerk/nextjs";
 import React, { useEffect } from "react";
 
 interface ChatIdprops {
@@ -12,16 +13,17 @@ interface ChatIdprops {
 }
 export default function ChatPage({ params: { id } }: ChatIdprops) {
   const chatId = id;
+  const { user } = useUser();
+  const userId = user?.publicMetadata.userId as string;
+  console.log(userId);
 
   useEffect(() => {
     const fetch_data = async () => {
-      const email = localStorage.getItem("email");
-      const userdata = await getUserData_ById({ userId: email! });
-      console.log(userdata.data?.loginDetails?.email);
+      const userdata = await getUserData_ById(userId);
 
       const res = await UpdateSeenMessage({
         chatId: chatId,
-        currentUserId: userdata.data?.loginDetails?._id,
+        currentUserId: userId,
       });
     };
     fetch_data();

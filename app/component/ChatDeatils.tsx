@@ -11,6 +11,7 @@ import { Create_Message } from "../lib/message.actions";
 import { CldUploadButton } from "next-cloudinary";
 import MessageBox from "./MessageBox";
 import { pusherClient } from "../../pusher/pusher";
+import { useUser } from "@clerk/nextjs";
 
 interface DeatilsProps {
   chatId: string;
@@ -31,17 +32,17 @@ export default function ChatDeatils({ chatId }: DeatilsProps) {
   const [otheMembers, setOthemebers] = useState<Member[]>([]);
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState("");
-
+  const { user } = useUser();
+  const userId = user?.publicMetadata.userId as string;
+  console.log(userId), "deta";
   useEffect(() => {
     const fetch_data = async () => {
       const chatresult = await getByIdChat(chatId);
-      const email = localStorage.getItem("email");
-      const userdata = await getUserData_ById({ userId: email! });
-      const current_id = userdata.data?.loginDetails?._id;
-      setDataId(userdata.data?.loginDetails?._id);
+
+      const userdata = await getUserData_ById(userId);
       setChat(chatresult);
       setOthemebers(
-        chatresult.members.filter((member: Member) => member._id !== current_id)
+        chatresult.members.filter((member: Member) => member._id !== userId)
       );
     };
     fetch_data();
@@ -50,7 +51,7 @@ export default function ChatDeatils({ chatId }: DeatilsProps) {
   const onupload = async (result: any) => {
     const newmessage = await Create_Message({
       chatId: chatId,
-      currentUserId: dataID,
+      currentUserId: userId,
       photo: result?.info?.secure_url,
     });
 
@@ -60,7 +61,7 @@ export default function ChatDeatils({ chatId }: DeatilsProps) {
   const SendText = async (result: any) => {
     const newmessage = await Create_Message({
       chatId: chatId,
-      currentUserId: dataID,
+      currentUserId: userId,
       text: text,
     });
     setText("");
@@ -140,7 +141,7 @@ export default function ChatDeatils({ chatId }: DeatilsProps) {
             <MessageBox
               key={message?._id}
               message={message}
-              currentUserId={dataID}
+              currentUserId={userId}
             />
           );
         })}

@@ -2,25 +2,27 @@
 
 import { Logout } from "@mui/icons-material";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import { getUserData_ById } from "../lib/auth.actions";
 import { UserDataProps } from "../type";
 import Image from "next/image";
+import { SignedIn, SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 
 const TopBar = () => {
   const pathname = usePathname();
   const [datafile, setDataFile] = useState<UserDataProps>();
+  const { user } = useUser();
+  const userId = user?.publicMetadata.userId as string;
 
   useEffect(() => {
     const fetch_data = async () => {
-      const email = localStorage.getItem("email");
-      const userdata = await getUserData_ById({ userId: email! });
+      const userdata = await getUserData_ById(userId);
       setDataFile(userdata);
     };
     fetch_data();
-  }, []);
+  }, [userId]);
 
   const handleLogout = async () => {
     // signOut({ callbackUrl: "/" });
@@ -56,16 +58,19 @@ const TopBar = () => {
           Contacts
         </Link>
 
-        <Logout
-          sx={{ color: "#737373", cursor: "pointer" }}
-          onClick={handleLogout}
-        />
+        <SignedIn>
+          <SignOutButton>
+            <Logout
+              sx={{ color: "#737373", cursor: "pointer" }}
+              onClick={handleLogout}
+            />
+          </SignOutButton>
+          {/* Mount the UserButton component */}
+        </SignedIn>
 
         <Link href="/profile">
           <Image
-            src={
-              datafile?.data.loginDetails.profileImage || "/assets/person.jpg"
-            }
+            src={datafile?.data?.profileImage || "/assets/person.jpg"}
             alt="profile"
             className="profilePhoto"
             width={100}

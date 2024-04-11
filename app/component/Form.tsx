@@ -32,52 +32,52 @@ export default function Form({ type }: { type: "register" | "login" }) {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      if (type === "register") {
-        const newUser = await AuthCreate({ user: { ...data } });
+  // const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  //   try {
+  //     if (type === "register") {
+  //       const newUser = await AuthCreate({ user: { ...data } });
 
-        if (newUser.status === 401) {
-          alert("This Email Already Exists");
-        }
+  //       if (newUser.status === 401) {
+  //         alert("This Email Already Exists");
+  //       }
 
-        if (newUser.status === 200) {
-          setSuccess(true);
-          router.push("/");
-        }
-      }
-      if (type === "login") {
-        const newUser = await AuthLogin({
-          user: { ...data },
-          isVerifyed: true,
-        });
+  //       if (newUser.status === 200) {
+  //         setSuccess(true);
+  //         router.push("/");
+  //       }
+  //     }
+  //     if (type === "login") {
+  //       const newUser = await AuthLogin({
+  //         user: { ...data },
+  //         isVerifyed: true,
+  //       });
 
-        setError(newUser.message);
+  //       setError(newUser.message);
 
-        if (newUser.status == 404) {
-          alert(error);
-        }
-        if (newUser.status == 200) {
-          const email = newUser?.CreateLogin.email;
+  //       if (newUser.status == 404) {
+  //         alert(error);
+  //       }
+  //       if (newUser.status == 200) {
+  //         const email = newUser?.CreateLogin.email;
 
-          localStorage.setItem("email", email);
-          const data = await getUserData_ById({ userId: email });
-          localStorage.setItem("data", JSON.stringify(data));
-          const local_Value = localStorage.getItem("data");
-          if (local_Value) {
-            const userData = JSON.parse(local_Value);
-            if (userData) {
-              dispatch(getData(userData));
-              setSuccess(true);
-              router.push(`/chats`);
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //         localStorage.setItem("email", email);
+  //         const data = await getUserData_ById({ userId: email });
+  //         localStorage.setItem("data", JSON.stringify(data));
+  //         const local_Value = localStorage.getItem("data");
+  //         if (local_Value) {
+  //           const userData = JSON.parse(local_Value);
+  //           if (userData) {
+  //             dispatch(getData(userData));
+  //             setSuccess(true);
+  //             router.push(`/chats`);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="auth">
@@ -90,7 +90,7 @@ export default function Form({ type }: { type: "register" | "login" }) {
           className="logo"
         />
 
-        <form className="form" onSubmit={handleSubmit(onSubmit)}>
+        <form className="form">
           {type === "register" && (
             <div>
               <div className="input">
